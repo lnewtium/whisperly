@@ -5,7 +5,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
   };
 
-  outputs = { nixpkgs }: let
+  outputs = { self, nixpkgs }: let
     system = "x86_64-linux";
     pkgs = import nixpkgs { inherit system; };
     pkgsMusl = import pkgs.path {
@@ -17,7 +17,9 @@
   in {
     devShell.${system} = pkgs.mkShell {
       buildInputs = [
-        pkgsMusl.gcc14
+        pkgsMusl.boost186
+        pkgsMusl.gcc13
+	pkgsMusl.cmake
       ];
     };
   };
