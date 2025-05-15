@@ -17,10 +17,12 @@
   in {
     devShell.${system} = pkgs.mkShell {
       buildInputs = [
-        pkgsMusl.boost186
-        pkgsMusl.gcc13
-	pkgsMusl.cmake
+	pkgsMusl.gcc13
+	pkgs.ninja
+	pkgs.cmake
+	pkgs.vcpkg
       ];
+      VCPKG_ROOT = "${pkgs.vcpkg.outPath}/share/vcpkg";
     };
   };
 }
