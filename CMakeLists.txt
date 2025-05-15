@@ -1,9 +1,10 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.30)
 
 project(whisperly LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDART 17)
+set(CMAKE_CXX_STANDART 20)
 set(CMAKE_CXX_STANDART_REQUIRED ON)
 
-# Add executable
-add_executable(whisperly src/main.cpp)
+# Add subdirectories
+add_subdirectory(src/client)
+add_subdirectory(src/server)
