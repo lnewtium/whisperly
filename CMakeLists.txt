@@ -6,5 +6,5 @@ set(CMAKE_CXX_STANDART 20)
 set(CMAKE_CXX_STANDART_REQUIRED ON)
 
 # Add subdirectories
-add_subdirectory(src/client)
-add_subdirectory(src/server)
+add_subdirectory(src/client ${CMAKE_BINARY_DIR}/client)
+add_subdirectory(src/server ${CMAKE_BINARY_DIR}/server)
