@@ -59,11 +59,11 @@ We believe in open source as a philosophy. Your contributions matter:
    2. **Add Toolchain:** Click `+` → `New Toolchain` → `System`
    3. **Configure fields:**
 
-   | **CMake**      | `$PROJECT_DIR$/.nix/nix-cmake.sh`      |
-   |----------------|----------------------------------------|
-   | **C Compiler** | `$PROJECT_DIR$/.nix/gcc`               |
-   | **C++ Compiler**| `$PROJECT_DIR$/.nix/g++`               |
-   | **Build Tool** | `$PROJECT_DIR$/.nix/make`              |
+   | **CMake**      | `$PROJECT_DIR$/.nix/nix-cmake.sh` |
+   |----------------|-----------------------------------|
+   | **C Compiler** | `$PROJECT_DIR$/.nix/gcc`          |
+   | **C++ Compiler**| `$PROJECT_DIR$/.nix/g++`          |
+   | **Build Tool** | `$PROJECT_DIR$/.nix/ninja`        |
 
 2. **Configure CMake Profile**
 
