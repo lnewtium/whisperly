@@ -8,6 +8,7 @@ UseTab: Never
 BreakBeforeBraces: Allman
 AllowShortFunctionsOnASingleLine: Empty
 ColumnLimit: 100
+PointerAlignment: Left
 
 # Namespace and includes
 NamespaceIndentation: All
@@ -24,4 +25,3 @@ AlignConsecutiveDeclarations: true
 
 # File-specific language
 Language: Cpp
-
