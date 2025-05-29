@@ -1,0 +1,48 @@
+# Use 2 spaces per indentation level
+tab_size: 2
+
+# Use spaces, not tab characters
+use_tabchars: false
+
+# Keep line widths reasonable
+line_width: 80
+
+# Format `set()` commands with aligned values
+align_set_command: true
+
+# Align keyword arguments in commands
+keyword_align: 'aligned'
+
+# Do not force parentheses to dangle onto a new line
+dangle_parens: false
+
+# Do not wrap everything by default unless necessary
+always_wrap: false
+
+# Format command invocations (like add_executable, target_link_libraries, etc.)
+format_command_invocations: true
+
+# Control wrapping of lists
+max_subgroups_hwrap: 2
+min_prefix_chars: 4
+max_prefix_chars: 10
+max_lines_hwrap: 2
+
+# Respect compact list formatting
+enable_sort: true
+autosort: true
+
+# Line ending style
+line_ending: unix
+
+# Keep spacing tight
+space_inside_parens: false
+separate_ctrl_name_with_space: false
+separate_fn_name_with_space: false
+
+bullet_char: '*'
+emit_byteorder_mark: false
+require_valid_layout: true
+
+# Disable the empty line at the end of file
+insert_trailing_newline: false
