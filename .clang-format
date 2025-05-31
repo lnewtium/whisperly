@@ -1,0 +1,27 @@
+# Base style
+BasedOnStyle: LLVM
+
+# Indentation and formatting
+IndentWidth: 2
+TabWidth: 2
+UseTab: Never
+BreakBeforeBraces: Allman
+AllowShortFunctionsOnASingleLine: Empty
+ColumnLimit: 80
+PointerAlignment: Left
+
+# Namespace and includes
+NamespaceIndentation: All
+IncludeBlocks: Preserve
+SortIncludes: true
+
+# Function declaration formatting
+AlwaysBreakAfterReturnType: None
+AlwaysBreakBeforeMultilineStrings: false
+AlignAfterOpenBracket: Align
+AlignOperands: true
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: true
+
+# File-specific language
+Language: Cpp
