@@ -5,7 +5,7 @@ tab_size: 2
 use_tabchars: false
 
 # Keep line widths reasonable
-line_width: 80
+line_width: 100
 
 # Format `set()` commands with aligned values
 align_set_command: true
