@@ -5,28 +5,47 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
   };
 
-  outputs =
-    { self, nixpkgs }:
+  outputs = { self, nixpkgs }:
     let
-      system = "x86_64-linux";
-      pkgs = import nixpkgs { inherit system; };
-      pkgsMusl = import pkgs.path {
-        inherit system;
+      linuxSystem = "x86_64-linux";
+      darwinSystem = "x86_64-darwin";
+
+      pkgsLinux = import nixpkgs { system = linuxSystem; };
+      pkgsMusl = import nixpkgs {
+        system = linuxSystem;
         crossSystem = {
           config = "x86_64-unknown-linux-musl";
         };
       };
+      pkgsDarwin = import nixpkgs { system = darwinSystem; };
     in
     {
-      devShell.${system} = pkgs.mkShell {
-        buildInputs = [
-          pkgs.gcc13
-          pkgs.ninja
-          pkgs.cmake
-          pkgs.vcpkg
-        ];
-        CMAKE_GENERATOR = "Ninja";
-        CMAKE_TOOLCHAIN_FILE = "${pkgs.vcpkg.outPath}/share/vcpkg/scripts/buildsystems/vcpkg.cmake";
+      devShells = {
+        ${linuxSystem} = {
+          default = pkgsLinux.mkShell {
+            buildInputs = [
+              pkgsLinux.gcc13
+              pkgsLinux.ninja
+              pkgsLinux.cmake
+              pkgsLinux.vcpkg
+            ];
+            CMAKE_GENERATOR = "Ninja";
+            CMAKE_TOOLCHAIN_FILE = "${pkgsLinux.vcpkg.outPath}/share/vcpkg/scripts/buildsystems/vcpkg.cmake";
+          };
+        };
+
+        ${darwinSystem} = {
+          default = pkgsDarwin.mkShell {
+            buildInputs = [
+              pkgsDarwin.gcc
+              pkgsDarwin.ninja
+              pkgsDarwin.cmake
+              pkgsDarwin.vcpkg
+            ];
+            CMAKE_GENERATOR = "Ninja";
+            CMAKE_TOOLCHAIN_FILE = "${pkgsDarwin.vcpkg.outPath}/share/vcpkg/scripts/buildsystems/vcpkg.cmake";
+          };
+        };
       };
     };
 }
