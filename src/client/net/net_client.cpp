@@ -14,12 +14,12 @@ using namespace beast;
 
 constexpr unsigned HTTP_VERSION = 11;
 
-ChatClient::ChatClient(asio::io_context& io, std::string_view host, std::string_view port)
+NetClient::NetClient(asio::io_context& io, std::string_view host, std::string_view port)
     : _resolver{asio::make_strand(io)}, _stream{asio::make_strand(io)}, _host{host}, _port{port}
 {
 }
 
-auto ChatClient::handshake() -> boost::asio::awaitable<void>
+auto NetClient::handshake() -> boost::asio::awaitable<void>
 {
   try
   {
@@ -39,7 +39,7 @@ auto ChatClient::handshake() -> boost::asio::awaitable<void>
   }
 }
 
-auto ChatClient::listenServer() -> void
+auto NetClient::listen_server() -> void
 {
   asio::co_spawn(
       _stream.get_executor(),
@@ -63,7 +63,7 @@ auto ChatClient::listenServer() -> void
       asio::detached);
 }
 
-auto ChatClient::send_message(std::string_view endpoint, std::string msg) -> asio::awaitable<void>
+auto NetClient::send_message(std::string_view endpoint, std::string msg) -> asio::awaitable<void>
 {
   try
   {
