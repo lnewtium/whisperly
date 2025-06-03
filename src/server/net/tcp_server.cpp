@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: BSD-2-Clause
-#include "http_server.hpp"
-#include "http_session.hpp"
+#include "tcp_server.hpp"
 #include <boost/asio/co_spawn.hpp>
 #include <boost/asio/detached.hpp>
 #include <boost/asio/ip/v6_only.hpp>
@@ -10,7 +9,7 @@
 using namespace boost;
 using tcp = asio::ip::tcp;
 
-ChatServer::ChatServer(asio::io_context& io, uint16_t port) : _acceptor{asio::make_strand(io)}
+TCPServer::TCPServer(asio::io_context& io, uint16_t port) : _acceptor{asio::make_strand(io)}
 {
   _acceptor.open(tcp::v6());                      // Use dual-stack (ipv4+ipv6 socket)
   _acceptor.set_option(asio::ip::v6_only(false)); // Enable dual-stack
@@ -19,7 +18,7 @@ ChatServer::ChatServer(asio::io_context& io, uint16_t port) : _acceptor{asio::ma
   _acceptor.listen();
 }
 
-auto ChatServer::start() -> asio::awaitable<void>
+auto TCPServer::start() -> asio::awaitable<void>
 {
   // Infinite loop for accepting tcp connections
   for (;;)
@@ -28,10 +27,31 @@ auto ChatServer::start() -> asio::awaitable<void>
   }
 }
 
-void ChatServer::handle_connection(boost::asio::ip::tcp::socket socket)
+auto TCPServer::handle_connection(boost::asio::ip::tcp::socket socket) -> void
 {
-  auto session = std::make_shared<HTTPSession>(std::move(socket));
+  auto session = std::make_shared<WSSession>(std::move(socket), shared_from_this());
   co_spawn(
       _acceptor.get_executor(), [session]() -> asio::awaitable<void> { co_await session->run(); },
       asio::detached);
+}
+
+auto TCPServer::join(const std::shared_ptr<WSSession>& session) -> void
+{
+  _sessions.insert(session);
+}
+
+auto TCPServer::leave(const std::shared_ptr<WSSession>& session) -> void
+{
+  _sessions.erase(session);
+}
+
+auto TCPServer::broadcast(const std::string& msg, const std::shared_ptr<WSSession>& sender) -> void
+{
+  for (auto& session : _sessions)
+  {
+    if (session != sender)
+    {
+      session->deliver(msg);
+    }
+  }
 }

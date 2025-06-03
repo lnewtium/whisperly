@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: BSD-2-Clause
-#include "http/http_server.hpp"
+#include "net/tcp_server.hpp"
 #include <boost/asio/co_spawn.hpp>
 #include <boost/asio/detached.hpp>
 #include <iostream>
 
 using namespace boost;
 
-int main()
+auto main() -> int
 {
   try
   {
@@ -15,11 +15,11 @@ int main()
         io,
         [&io]() -> asio::awaitable<void>
         {
-          ChatServer server{io, 8080};
-          co_await server.start();
+          auto server = std::make_shared<TCPServer>(io, 8080);
+          co_await server->start();
         },
         asio::detached);
-    std::cout << "Coroutine-based HTTP server running at http://localhost:8080\n";
+    std::cout << "Coroutine-based WebSocket server running at http://localhost:8080\n";
     io.run();
   }
   catch (const std::exception& e)
