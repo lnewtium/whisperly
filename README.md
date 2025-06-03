@@ -35,7 +35,7 @@ This project was born for personal use, but if it helps others too, we’ll be g
 While we prepare the release, you can:
 1. Clone the repository:
    ```bash  
-   git clone https://github.com/lnewtium/whispernet.git 
+   git clone https://github.com/lnewtium/whisperly.git 
 2. Follow updates in the dev branch.
 3. Want to help? See the Contributing section below.
 
