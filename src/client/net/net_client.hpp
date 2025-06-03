@@ -7,14 +7,14 @@
 #include <string>
 #include <string_view>
 
-class ChatClient
+class NetClient
 {
 
 public:
-  ChatClient(boost::asio::io_context& io, std::string_view host, std::string_view port);
+  NetClient(boost::asio::io_context& io, std::string_view host, std::string_view port);
   auto handshake() -> boost::asio::awaitable<void>;
   auto send_message(std::string_view endpoint, std::string msg) -> boost::asio::awaitable<void>;
-  auto listenServer() -> void;
+  auto listen_server() -> void;
 
 private:
   boost::asio::ip::tcp::resolver _resolver;
