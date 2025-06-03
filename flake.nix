@@ -19,7 +19,7 @@
         ${linuxSystem} = {
           default = pkgsLinux.mkShell {
             buildInputs = [
-              pkgsLinux.gcc13
+              pkgsLinux.gcc
               pkgsLinux.ninja
               pkgsLinux.cmake
               pkgsLinux.vcpkg
