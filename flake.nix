@@ -1,22 +1,17 @@
 {
-  description = "Win32 + Linux musl build env";
+  description = "Linux & MacOS build env";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
   };
 
-  outputs = { self, nixpkgs }:
+  outputs =
+    { self, nixpkgs }:
     let
       linuxSystem = "x86_64-linux";
       darwinSystem = "x86_64-darwin";
 
       pkgsLinux = import nixpkgs { system = linuxSystem; };
-      pkgsMusl = import nixpkgs {
-        system = linuxSystem;
-        crossSystem = {
-          config = "x86_64-unknown-linux-musl";
-        };
-      };
       pkgsDarwin = import nixpkgs { system = darwinSystem; };
     in
     {
