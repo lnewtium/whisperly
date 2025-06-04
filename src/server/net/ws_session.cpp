@@ -25,14 +25,20 @@ auto WSSession::run() -> net::awaitable<void>
     std::cout << "Accepting new WebSocket connection...\n";
     co_await _ws.async_accept(net::use_awaitable);
     std::cout << "Handshake successful!\n";
-    _server->join(shared_from_this());
-    co_await do_read();
+    if (auto s = _server.lock())
+    {
+      s->leave(shared_from_this());
+      co_await do_read();
+    }
   }
   catch (const std::exception& e)
   {
     std::cerr << "Session exception: " << e.what() << '\n';
   }
-  _server->leave(shared_from_this());
+  if (auto s = _server.lock())
+  {
+    s->leave(shared_from_this());
+  }
 }
 
 auto WSSession::do_read() -> net::awaitable<void>
@@ -46,7 +52,10 @@ auto WSSession::do_read() -> net::awaitable<void>
       std::string msg = beast::buffers_to_string(buf.data());
       std::cout << "Readed from client: " << msg << '\n';
       // Broadcast to all other sessions via server
-      _server->broadcast(msg, shared_from_this());
+      if (auto s = _server.lock())
+      {
+        s->broadcast(msg, shared_from_this());
+      }
     }
     catch (const std::exception& e)
     {
