@@ -36,6 +36,7 @@ auto NetClient::handshake() -> net::awaitable<void>
   catch (const std::exception& e)
   {
     std::cerr << "Initial error: " << e.what() << '\n';
+    exit(-1);
   }
 }
 
