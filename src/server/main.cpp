@@ -4,21 +4,21 @@
 #include <boost/asio/detached.hpp>
 #include <iostream>
 
-using namespace boost;
+namespace net = boost::asio;
 
 auto main() -> int
 {
   try
   {
-    asio::io_context io{1};
-    asio::co_spawn(
+    net::io_context io{1};
+    net::co_spawn(
         io,
-        [&io]() -> asio::awaitable<void>
+        [&io]() -> net::awaitable<void>
         {
           auto server = std::make_shared<TCPServer>(io, 8080);
           co_await server->start();
         },
-        asio::detached);
+        net::detached);
     std::cout << "Coroutine-based WebSocket server running at http://localhost:8080\n";
     io.run();
   }
