@@ -9,29 +9,29 @@
 #include <boost/beast/core/flat_buffer.hpp>
 #include <iostream>
 
-using namespace boost;
-using namespace beast;
+namespace net   = boost::asio;
+namespace beast = boost::beast;
 
 constexpr unsigned HTTP_VERSION = 11;
 
-NetClient::NetClient(asio::io_context& io, std::string_view host, std::string_view port)
-    : _resolver{asio::make_strand(io)}, _stream{asio::make_strand(io)}, _host{host}, _port{port}
+NetClient::NetClient(net::io_context& io, std::string_view host, std::string_view port)
+    : _resolver{net::make_strand(io)}, _stream{net::make_strand(io)}, _host{host}, _port{port}
 {
 }
 
-auto NetClient::handshake() -> boost::asio::awaitable<void>
+auto NetClient::handshake() -> net::awaitable<void>
 {
   try
   {
     // Endpoint lookup
-    auto server_endpoints = co_await _resolver.async_resolve(_host, _port, asio::use_awaitable);
+    auto server_endpoints = co_await _resolver.async_resolve(_host, _port, net::use_awaitable);
 
     // Init http connection
-    co_await asio::async_connect(_stream.next_layer().socket(), server_endpoints,
-                                 asio::use_awaitable);
+    co_await net::async_connect(_stream.next_layer().socket(), server_endpoints,
+                                net::use_awaitable);
 
     // Perform ws handshake (upgrade http to ws)
-    co_await _stream.async_handshake(_host, "/", asio::use_awaitable);
+    co_await _stream.async_handshake(_host, "/", net::use_awaitable);
   }
   catch (const std::exception& e)
   {
@@ -41,16 +41,16 @@ auto NetClient::handshake() -> boost::asio::awaitable<void>
 
 auto NetClient::listen_server() -> void
 {
-  asio::co_spawn(
+  net::co_spawn(
       _stream.get_executor(),
-      [this]() -> asio::awaitable<void>
+      [this]() -> net::awaitable<void>
       {
         beast::flat_buffer buf;
         for (;;)
         {
           try
           {
-            co_await _stream.async_read(buf, asio::use_awaitable);
+            co_await _stream.async_read(buf, net::use_awaitable);
             std::cout << "Received: " << beast::buffers_to_string(buf.data()) << '\n' << std::flush;
             buf.consume(buf.size());
           }
@@ -60,14 +60,14 @@ auto NetClient::listen_server() -> void
           }
         }
       },
-      asio::detached);
+      net::detached);
 }
 
-auto NetClient::send_message(std::string_view endpoint, std::string msg) -> asio::awaitable<void>
+auto NetClient::send_message(std::string_view endpoint, std::string msg) -> net::awaitable<void>
 {
   try
   {
-    co_await _stream.async_write(asio::buffer(msg), asio::use_awaitable);
+    co_await _stream.async_write(net::buffer(msg), net::use_awaitable);
   }
   catch (const std::exception& e)
   {

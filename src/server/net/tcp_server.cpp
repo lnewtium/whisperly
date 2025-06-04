@@ -6,33 +6,33 @@
 #include <boost/asio/strand.hpp>
 #include <boost/asio/use_awaitable.hpp>
 
-using namespace boost;
-using tcp = asio::ip::tcp;
+namespace net = boost::asio;
+using tcp     = boost::asio::ip::tcp;
 
-TCPServer::TCPServer(asio::io_context& io, uint16_t port) : _acceptor{asio::make_strand(io)}
+TCPServer::TCPServer(net::io_context& io, uint16_t port) : _acceptor{net::make_strand(io)}
 {
-  _acceptor.open(tcp::v6());                      // Use dual-stack (ipv4+ipv6 socket)
-  _acceptor.set_option(asio::ip::v6_only(false)); // Enable dual-stack
+  _acceptor.open(tcp::v6());                     // Use dual-stack (ipv4+ipv6 socket)
+  _acceptor.set_option(net::ip::v6_only(false)); // Enable dual-stack
   _acceptor.set_option(tcp::socket::reuse_address{true});
-  _acceptor.bind(tcp::endpoint{asio::ip::make_address("::"), port}); // Bind to any ip
+  _acceptor.bind(tcp::endpoint{net::ip::make_address("::"), port}); // Bind to any ip
   _acceptor.listen();
 }
 
-auto TCPServer::start() -> asio::awaitable<void>
+auto TCPServer::start() -> net::awaitable<void>
 {
   // Infinite loop for accepting tcp connections
   for (;;)
   {
-    handle_connection(co_await _acceptor.async_accept(asio::use_awaitable));
+    handle_connection(co_await _acceptor.async_accept(net::use_awaitable));
   }
 }
 
-auto TCPServer::handle_connection(boost::asio::ip::tcp::socket socket) -> void
+auto TCPServer::handle_connection(tcp::socket socket) -> void
 {
   auto session = std::make_shared<WSSession>(std::move(socket), shared_from_this());
   co_spawn(
-      _acceptor.get_executor(), [session]() -> asio::awaitable<void> { co_await session->run(); },
-      asio::detached);
+      _acceptor.get_executor(), [session]() -> net::awaitable<void> { co_await session->run(); },
+      net::detached);
 }
 
 auto TCPServer::join(const std::shared_ptr<WSSession>& session) -> void

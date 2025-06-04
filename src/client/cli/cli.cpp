@@ -5,23 +5,23 @@
 #include <boost/asio/streambuf.hpp>
 #include <boost/asio/use_awaitable.hpp>
 
-using namespace boost;
+namespace net = boost::asio;
 
-CLI::CLI(asio::io_context& io, std::shared_ptr<NetClient> net)
-    : _strand{asio::make_strand(io)}, _net{std::move(net)}
+CLI::CLI(net::io_context& io, std::shared_ptr<NetClient> net)
+    : _strand{net::make_strand(io)}, _net{std::move(net)}
 {
 }
 
-auto CLI::handle_input() -> boost::asio::awaitable<void>
+auto CLI::handle_input() -> net::awaitable<void>
 {
   // Wrap stdin (fd 0) into Asio stream_descriptor
-  asio::posix::stream_descriptor stream_in(_strand, ::dup(STDIN_FILENO));
+  net::posix::stream_descriptor stream_in(_strand, ::dup(STDIN_FILENO));
   for (;;)
   {
-    asio::streambuf buf;
-    size_t          n = co_await asio::async_read_until(stream_in, buf, '\n', asio::use_awaitable);
-    std::istream    is(&buf);
-    std::string     msg;
+    net::streambuf buf;
+    size_t         n = co_await net::async_read_until(stream_in, buf, '\n', net::use_awaitable);
+    std::istream   is(&buf);
+    std::string    msg;
     std::getline(is, msg);
     if (msg == "/exit")
       break;

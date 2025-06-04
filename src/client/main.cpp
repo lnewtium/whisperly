@@ -7,18 +7,18 @@
 #include <boost/asio/io_context.hpp>
 #include <iostream>
 
-using namespace boost;
+namespace net = boost::asio;
 
 auto main() -> int
 {
   try
   {
     // TODO: Run ui and net in separate threads
-    asio::io_context io{1};
+    net::io_context io{1};
 
-    asio::co_spawn(
+    net::co_spawn(
         io,
-        [&io]() -> asio::awaitable<void>
+        [&io]() -> net::awaitable<void>
         {
           auto net_client = std::make_shared<NetClient>(io, "localhost", "8080");
           co_await net_client->handshake();
@@ -26,7 +26,7 @@ auto main() -> int
           CLI cli{io, net_client};
           co_await cli.handle_input();
         },
-        asio::detached);
+        net::detached);
     io.run();
   }
   catch (const std::exception& e)
