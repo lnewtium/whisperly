@@ -22,7 +22,7 @@ private:
   // FIXME: Enable deflate support?
   boost::beast::websocket::stream<boost::beast::tcp_stream, false> _ws;
   std::deque<std::string>                                          _msg_hist;
-  std::shared_ptr<TCPServer>                                       _server;
+  std::weak_ptr<TCPServer>                                         _server;
   // Handles inbound message
   auto do_read() -> boost::asio::awaitable<void>;
   auto do_write() -> boost::asio::awaitable<void>;
