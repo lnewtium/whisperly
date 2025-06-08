@@ -23,6 +23,9 @@
               pkgsLinux.ninja
               pkgsLinux.cmake
               pkgsLinux.vcpkg
+              pkgsLinux.pkg-config
+              pkgsLinux.linuxHeaders
+              pkgsLinux.openssl
             ];
             CMAKE_GENERATOR = "Ninja";
             CMAKE_TOOLCHAIN_FILE = "${pkgsLinux.vcpkg.outPath}/share/vcpkg/scripts/buildsystems/vcpkg.cmake";
