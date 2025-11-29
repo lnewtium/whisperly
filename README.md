@@ -31,13 +31,21 @@ This project was born for personal use, but if it helps others too, we’ll be g
 
 ---
 
-### Installation (Coming Soon)
-While we prepare the release, you can:
+### Installation
 1. Clone the repository:
-   ```bash  
-   git clone https://github.com/lnewtium/whisperly.git 
-2. Follow updates in the dev branch.
-3. Want to help? See the Contributing section below.
+```bash
+$ git clone https://github.com/lnewtium/whisperly.git
+```
+2. Build in shell
+```bash
+$ cmake -S . -B out -DCMAKE_TOOLCHAIN_FILE=${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake
+$ cmake --build out
+```
+3. Run
+```bash
+$ ./out/client/whisperly_client # Client
+$ ./out/server/whisperly_server # Server
+```
 
 ---
 
