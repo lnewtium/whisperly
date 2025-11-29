@@ -51,29 +51,6 @@ We believe in open source as a philosophy. Your contributions matter:
 - Keep code simple and readable.
 - No unnecessary dependencies.
 
-<details>
-<summary><strong>Development with CLion</strong></summary>
-
-1. **Create New Toolchain**
-   1. **Open:** `File → Settings → Build, Execution, Deployment → Toolchains`
-   2. **Add Toolchain:** Click `+` → `New Toolchain` → `System`
-   3. **Configure fields:**
-
-   | **CMake**      | `$PROJECT_DIR$/.nix/nix-cmake.sh` |
-   |----------------|-----------------------------------|
-   | **C Compiler** | `$PROJECT_DIR$/.nix/gcc`          |
-   | **C++ Compiler**| `$PROJECT_DIR$/.nix/g++`          |
-   | **Build Tool** | `$PROJECT_DIR$/.nix/ninja`        |
-
-2. **Configure CMake Profile**
-
-   1. **Go to:** `File → Settings → Build, Execution, Deployment → CMake`
-   2. Select the **toolchain** you created
-
-
-3. **Try To Build**
-</details>
-
 ---
 
 Use the code freely, but remember: **privacy is not for sale**.
